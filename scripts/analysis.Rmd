@@ -1,0 +1,92 @@
+---
+title: "Weighted Analyses"
+author: "steppe"
+date: "2022-12-12"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+
+```{r Load Libraries}
+library(tidyverse)
+library(spsurvey)
+library(sf)
+```
+
+
+```{r Load and subset data to field office, warning = F}
+pr <- '../data/raw'
+f <- list.files(pr, recursive = T)
+
+UFO_borders <- st_read(file.path(pr, f[grep('*admu.*shp$', f)]), quiet = T) %>% 
+  filter(str_detect(ADMU_NAME, 'UNCOMPAHGRE')) %>% 
+  st_transform(4269) %>% 
+  select(geometry)
+
+base_plots <- read.csv(file.path(pr, f[grep('*Plot*', f)])) %>% 
+   filter(!str_detect(PANEL, 'over'))
+
+summaries <- read.csv(file.path(pr, f[grep('*Hub*', f)])) %>% 
+  filter(State == 'CO') %>%  # reduce to your state of interest 
+  select(-X, -Y, -State:-EcolSiteName, -DateVisited, -Purpose:-DBKey, -PrimaryKey, 
+         -starts_with("RH_"), -starts_with('Sagebrush'), -starts_with('Spp_')) %>% 
+  st_as_sf(coords = c(x = 'Longitude_NAD83', y = 'Latitude_NAD83'), crs = 4269, remove = F) %>%  # now make spatial
+  st_intersection(UFO_borders, .) %>% 
+  select_if(~sum(!is.na(.)) > 0)
+
+rm(f, pr, UFO_borders)
+```
+
+
+
+```{r Filter TerraDat to grab only base AIM plots}
+
+
+
+```
+
+
+```{r Filter dataset for only variables which have variation}
+
+summary_cols_not_applicable <- summaries %>% # find columns, where fractional cover
+  select(where(~ is.numeric(.x) && sum(.x, na.rm = T) == 0)) %>% # in all rows
+  colnames() # is equal to 0, these are func. grps. not present in the area of analysis
+
+NA_per_col <- summaries %>% # we can identify columns which have MANY NA values in them
+  st_drop_geometry() %>% # perhaps if > 10% of your values per variables are NA
+  summarise(across(.cols = everything(),  ~ (sum(is.na(.))))/nrow(.) * 100) %>% 
+  select(where(~ .x >= 10)) # you want to take a look at them - Ours are not too bad.
+
+Variation <- summaries %>% # IDENTIFY COLUMNS with little to no variation in the 
+  st_drop_geometry() %>% # measured variables, if we see var == 0, all measurements
+  select(where(~ is.numeric(.x))) %>%  # were the same but not caught by 'summary cols not applicable'
+  summarise(across(.cols = everything(), ~ # we do not have this problem which may
+                     var(scales::rescale(., to = c(0,1), na.rm = T), na.rm = T))) %>% 
+  t() %>% # arise if we always have the same response of an encoded categorical variable
+  data.frame() %>% # we can still see which of the variables have littler variance
+  rownames_to_column('Variable') %>% rename(Variance = '.') %>% # here
+  filter(!Variable %in% c('OBJECTID', 'Latitude_NAD83', 'Longitude_NAD83', 'YearEstablished'))
+
+# hist(Variation$Variance) # the values far left are seldom recorded, e.g. we got rid of vagrant lichen years ago!
+
+summaries1 <- summaries %>% 
+  st_drop_geometry() %>% 
+  filter(is.na(SoilStability_All)) %>% 
+  mutate(across(starts_with('SoilStability'), ~ 999))
+summaries <- summaries %>% 
+  filter(!PlotID %in% summaries1$PlotID) %>% 
+  bind_rows(., summaries1)
+
+summaries <- summaries %>% 
+  select(-any_of(summary_cols_not_applicable)) %>% 
+  mutate(DateEstablished = as.Date(DateEstablished), # convert to date format
+         YearEstablished = as.numeric(format(DateEstablished,'%Y'), .)
+         )
+
+rm(summary_cols_not_applicable, NA_per_col, Variation, summary_cols_not_applicable, summaries1)
+```
+
+

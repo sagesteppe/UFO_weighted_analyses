@@ -1,0 +1,566 @@
+<?xml version="1.0" encoding="UTF-8"?><metadata>
+    <idinfo>
+        <citation>
+            <citeinfo>
+                <origin/>
+                <pubdate>20220105</pubdate>
+                <title>BLM Colorado Field Office Areas Boundaries</title>
+                <geoform>vector digital data</geoform>
+                <serinfo>
+                    <sername>BLM Field Office Boundaries</sername>
+                    <issue>SDE Production DB admu</issue>
+                </serinfo>
+                <pubinfo>
+                    <pubplace/>
+                    <publish>Bureau of Land Management</publish>
+                </pubinfo>
+                <onlink>https://gbp-blm-egis.hub.arcgis.com/</onlink>
+            </citeinfo>
+        </citation>
+        <descript>
+            <abstract>This data set consists of digital data describing BLM Colorado's Administrative Unit Boundaries in the State of Colorado, also known as BLM Colorado Field Office Areas. This data set was derived from BLM Colorado Field Office data captured at a scale of 1:24,000 and joined into a resulting statewide map layer. Differences in data capture techniques resulted in the data editor dropping some boundaries from various Field Office Areas to avoid sliver problems. The data was snapped to the 2016 Geographic Coordinate Data Base (GCDB) for boundary consistency</abstract>
+            <purpose>To accurately depict BLM Colorado Field Office boundaries for land-use planning efforts and informed decision making. NOTE: This data set is subject to daily updates. Process steps and publication dates are not reflected.</purpose>
+            <supplinf>A published revision of the Department Manuals Part 305: Departmental Science Effects, Chapter 3: Integrity of Scientific and Scholarly Activities (305 DM 3), effective December 16, 2014, is available online at http://elips.doi.gov/ELIPS/DocView.aspx?id=4056. Scholarly information considered in Departmental decision making must be robust, of the highest quality, and the result of as rigorous scientific and scholarly processes as can be achieved. Most importantly, it must be trustworthy. This policy helps us to achieve that standard (http://www.doi.gov/scientificintegrity/index.cfm)</supplinf>
+        </descript>
+        <timeperd>
+            <timeinfo>
+                <sngdate>
+                    <caldate>20220105</caldate>
+                </sngdate>
+            </timeinfo>
+            <current>publication date</current>
+        </timeperd>
+        <status>
+            <progress>Complete</progress>
+            <update>None planned</update>
+        </status>
+        <spdom>
+            <bounding>
+                <westbc>-109.279623</westbc>
+                <eastbc>-101.868832</eastbc>
+                <northbc>41.071909</northbc>
+                <southbc>36.926323</southbc>
+            </bounding>
+        </spdom>
+        <keywords>
+            <theme>
+                <themekt>BLM-THEME</themekt>
+                <themekey>Geospatial</themekey>
+                <themekey>Management</themekey>
+            </theme>
+            <theme>
+                <themekt>NONE</themekt>
+                <themekey>ADMU</themekey>
+                <themekey>BLM</themekey>
+                <themekey>Bureau of Land Management</themekey>
+                <themekey>Department of the Interior</themekey>
+                <themekey>DOI</themekey>
+                <themekey>Field Office</themekey>
+            </theme>
+            <theme>
+                <themekt>ISO 19115 Topic Categories</themekt>
+                <themekey>boundaries</themekey>
+            </theme>
+            <place>
+                <placekt>BLM-STATE</placekt>
+                <placekey>Colorado</placekey>
+            </place>
+        </keywords>
+        <accconst>None, these data are considered public domain.</accconst>
+        <useconst>These data are provided by Bureau of Land Management (BLM) “as is” and might contain errors or omissions. The User assumes the entire risk associated with its use of these data and bears all responsibility in determining whether these data are fit for the User’s intended use. The information contained in these data is dynamic and may change over time. The data are not better than the sources from which they were derived, and both scale and accuracy may vary across the data set. These data might not have the accuracy, resolution, completeness, timeliness, or other characteristics appropriate for applications that potential users of the data may contemplate. The User is encouraged to carefully consider the content of the metadata file associated with these data. These data are neither legal documents nor land surveys, and must not be used as such. Official records may be referenced at most BLM offices. Please report any errors in the data to the BLM office from which it was obtained. The BLM should be cited as the data source in any products derived from these data. Any Users wishing to modify the data should describe the types of modifications they have performed. The User should not misrepresent the data, nor imply that changes made were approved or endorsed by BLM. This data may be updated by the BLM without notification.</useconst>
+        <ptcontac>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>Bureau of Land Management, Colorado State Office</cntorg>
+                    <cntper>Data Steward</cntper>
+                </cntorgp>
+                <cntpos>Supervisory Land Surveyor</cntpos>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>2850 Youngfield Street</address>
+                    <city>Lakewood</city>
+                    <state>CO</state>
+                    <postal>80215</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>303-239-3600</cntvoice>
+                <cntemail>blm_co_info@blm.gov</cntemail>
+            </cntinfo>
+        </ptcontac>
+        <datacred>BLM Colorado State Office</datacred>
+        <native>Esri ArcGIS 10.4.1.5686</native>
+        <crossref>
+            <citeinfo>
+                <pubdate>20170410</pubdate>
+                <title>BLM Colorado Field Office Areas</title>
+            </citeinfo>
+        </crossref>
+    </idinfo>
+    <dataqual>
+        <attracc>
+            <attraccr>Please contact the specific office Point of Contact for additional information on the provenance, history, logical consistency, accuracy and quality of their data.</attraccr>
+        </attracc>
+        <logic>Please contact the specific office Point of Contact for additional information on the provenance, history, logical consistency, accuracy and quality of their data.</logic>
+        <complete>Please contact the specific office Point of Contact for additional information on the provenance, history, logical consistency, accuracy and quality of their data.</complete>
+        <posacc>
+            <horizpa>
+                <horizpar>Please contact the specific office Point of Contact for additional information on the provenance, history, logical consistency, accuracy and quality of their data.</horizpar>
+            </horizpa>
+            <vertacc>
+                <vertaccr>Please contact the specific office Point of Contact for additional information on the provenance, history, logical consistency, accuracy and quality of their data.</vertaccr>
+            </vertacc>
+        </posacc>
+        <lineage>
+            <procstep>
+                <procdesc>Dataset copied</procdesc>
+                <procdate>20220105</procdate>
+                <proccont>
+                    <cntinfo>
+                        <cntorgp>
+                            <cntorg>BLM Colorado State Office</cntorg>
+                            <cntper>State Geospatial Lead</cntper>
+                        </cntorgp>
+                        <cntpos>State Geospatial Lead</cntpos>
+                        <cntaddr>
+                            <addrtype>mailing and physical</addrtype>
+                            <address>2850 Youngfield St</address>
+                            <city>Lakewood</city>
+                            <state>CO</state>
+                            <postal>80215</postal>
+                            <country>US</country>
+                        </cntaddr>
+                        <cntvoice>303-239-3600</cntvoice>
+                        <cntemail>blm_co_info@blm.gov</cntemail>
+                    </cntinfo>
+                </proccont>
+            </procstep>
+        </lineage>
+    </dataqual>
+    <spdoinfo>
+        <direct>Vector</direct>
+        <ptvctinf>
+            <sdtsterm>
+                <sdtstype>GT-polygon composed of chains</sdtstype>
+                <ptvctcnt>10</ptvctcnt>
+            </sdtsterm>
+        </ptvctinf>
+    </spdoinfo>
+    <eainfo>
+        <detailed>
+            <enttyp>
+                <enttypl>BLM_CO_ADMU_FO_20180102</enttypl>
+                <enttypd>BLM Colorado Administrative Unit Boundary Polygons</enttypd>
+                <enttypds>BLM</enttypds>
+            </enttyp>
+            <attr>
+                <attrlabl>OBJECTID</attrlabl>
+                <attrdef>Internal feature number.</attrdef>
+                <attrdefs>Esri</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Sequential unique whole numbers that are automatically generated.</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>ADM_UNIT_CD</attrlabl>
+                <attrdef>The code that indicates the formal grouping of positions into designated units and the assignment of functions and responsibilities to those units based on the DOI FPPS structure.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>SHAPE</attrlabl>
+                <attrdef>Feature geometry.</attrdef>
+                <attrdefs>ESRI</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Coordinates defining the features.</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>BLM_ORG_TYPE</attrlabl>
+                <attrdef>A name that indicates the type of organization that is being described.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>ADMU_NAME</attrlabl>
+                <attrdef>Administrative Unit Name: The name that corresponds to the administrative unit code for the polygon. The value for this attribute should be derived from the FPPS codes. (Logical Attribute: Organization Name. The official name by which the organization is known. An organization may include businesses, agencies, or corporations, but not individual persons.)</attrdef>
+                <attrdefs>BLM</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Not representable in a domain</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>EFF_DT</attrlabl>
+                <attrdef>Effective Date: (Logical Attribute: Administered BLM Land Location Effective Date. The date on which an area of BLM Land becomes the responsibility of a BLM administrative unit) Effective date when the administrative unit number, name, or physical boundary was changed. The date will be in the format of mm/dd/yyyy. The effective date will occur on or after the approval date. If the effective date is unknown for the initial data load, the default date will be used. Changes that occur after implementation of the standard must use the actual effective date. Default: 09/09/9999</attrdef>
+                <attrdefs>BLM</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Not representable in a domain</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>ADMU_ST_URL</attrlabl>
+                <attrdef>The URL of the State Office website. The standard format for a BLM state website is http://www.blm.gov/xx/st/en.html where “xx” is the 2-character state abbreviation.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>APPRV_DT</attrlabl>
+                <attrdef>Approval Date: (Logical Attribute: BLM Organization Unit Approval Date. The date on which the BLM Washington Office or Assistant Secretary, Land and Minerals Management approved or concurred with the change to the organization unit number, name and/or administrative unit boundaries.) The date that the change to the administrative unit was approved. If the approval date is unknown for the initial data load, the default date will be used. Changes that occur after implementation of the standard must use the actual approval date. Format as mm/dd/yyyy. Default: 09/09/9999</attrdef>
+                <attrdefs>BLM</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <udom>Not representable in a domain</udom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>PARENT_NAME</attrlabl>
+                <attrdef>The official name by which the organization is known. An organization may include businesses, agencies, or corporations, but not individual persons.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>PARENT_CD</attrlabl>
+                <attrdef>Parent Admin Code: This is the parent of the administrative unit being mapped. An Administrative State may be the parent of District Offices, Field Offices, or other autonomous areas such as National Monuments. A District Office is the parent of Field Offices. This attribute may be used to derive the boundaries of the parent administrative unit, and should reflect organizational tiers. The BLM administrative unit/office that is a combination of Administrative State Code and Administrative Office Code that fully identifies the geographic area which has jurisdiction over the lands. This is an eight-character code. In the FPPS Organization Codes, use the last eight characters (e.g. "AK030900" from LLAK030900). (Logical Attribute: BLM Organization Unit Parent Identifier. The identifier for the administrative unit that is a tier above this unit. The code that indicates the formal grouping of positions at into designated units and the assignment of functions and responsibilities to those units based on the DOI FPPS structure.)</attrdef>
+                <attrdefs>BLM</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <codesetd>
+                                                						
+                        
+                        <codesetn>DOM_ADM_UNIT_CD</codesetn>
+                                                						
+                        
+                        <codesets>http://web.blm.gov/data_mgt/std_proc.htm</codesets>
+                                                					
+                    
+                    </codesetd>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>GlobalID</attrlabl>
+                <attrdef>Software generated value. A field of type UUID (Universal Unique Identifier) in which values are automatically assigned by the geodatabase when a row is created. This field is not editable and is automatically populated when it is added for existing data.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>created_user</attrlabl>
+                <attrdef>The UserID (BLM login ID) of the person who created or imported the data into the BLM GIS system. This attribute will be deleted before providing the data to the public.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>created_date</attrlabl>
+                <attrdef>The date which is the calendar year, month, and day when the position of the Location was produced.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>last_edited_user</attrlabl>
+                <attrdef>The UserID (BLM login ID) of the person who edited or modified data in the BLM GIS system will be collected and maintained.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>last_edited_date</attrlabl>
+                <attrdef>The date which is the calendar year, month, and day when the position of the Location was last modified.</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>ADMIN_ST</attrlabl>
+                <attrdef>Administrative State Code: Two letter, upper case abbreviation for the administrative state office. The current list of values is: AK, AZ, CA, CO, ES, ID, MT, NM, NV, OR, UT and WY. In the FBMS Organization Codes, use the second 2 characters (after the LL). (e.g. LLAK039000). Attribute Domain Assignment: DOM_ADMIN_ST (Logical Attribute: State Alphabetic Code. An alphabetic abbreviation that represents each of the 50 states of the United States, the District of Columbia, the outlying areas of the United States, and associated areas. FIPS PUB 5-2.) An administrative unit that identifies the state or geographic area which has administrative jurisdiction over lands, and cases. The land for a case may not be physically located in the associated administrative state. Only those states that are BLM administrative states are in the domain for this entity. Example: Montana is the Administrative State for public lands in the geographic States of Montana, South and North Dakota.</attrdef>
+                <attrdefs>BLM</attrdefs>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>AK</edomv>
+                                                						
+                        
+                        <edomvd>Alaska</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>AZ</edomv>
+                                                						
+                        
+                        <edomvd>Arizona</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>CA</edomv>
+                                                						
+                        
+                        <edomvd>California</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>CO</edomv>
+                                                						
+                        
+                        <edomvd>Colorado</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>ES</edomv>
+                                                						
+                        
+                        <edomvd>Eastern States</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>ID</edomv>
+                                                						
+                        
+                        <edomvd>Idaho</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>MT</edomv>
+                                                						
+                        
+                        <edomvd>Montana</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>NM</edomv>
+                                                						
+                        
+                        <edomvd>New Mexico</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>NV</edomv>
+                                                						
+                        
+                        <edomvd>Nevada</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>OR</edomv>
+                                                						
+                        
+                        <edomvd>Oregon</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>UT</edomv>
+                                                						
+                        
+                        <edomvd>Utah</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+                <attrdomv>
+                                        					
+                    
+                    <edom>
+                                                						
+                        
+                        <edomv>WY</edomv>
+                                                						
+                        
+                        <edomvd>Wyoming</edomvd>
+                                                						
+                        
+                        <edomvds>BLM</edomvds>
+                                                					
+                    
+                    </edom>
+                                        				
+                
+                </attrdomv>
+            </attr>
+            <attr>
+                <attrlabl>SHAPE.STArea()</attrlabl>
+                <attrdef>Shape area</attrdef>
+            </attr>
+            <attr>
+                <attrlabl>SHAPE.STLength()</attrlabl>
+                <attrdef>shape length</attrdef>
+            </attr>
+        </detailed>
+        <overview>
+            <eaover>See individual attribute discriptions</eaover>
+        </overview>
+    </eainfo>
+    <distinfo>
+        <distrib>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>BLM Colorado State Office</cntorg>
+                    <cntper>State Geospatial Lead</cntper>
+                </cntorgp>
+                <cntpos>State Geospatial Lead</cntpos>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>2850 Youngfield Street</address>
+                    <city>Lakewood</city>
+                    <state>CO</state>
+                    <postal>80215</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>303 239-3600</cntvoice>
+                <cntemail>blm_co_info@blm.gov</cntemail>
+            </cntinfo>
+        </distrib>
+        <distliab>The BLM assumes no responsibility for errors or omissions. No warranty is made by the BLM as to the accuracy, reliability, or completeness of these data for individual use or aggregate use with other data; nor shall the act of distribution to contractors, partners, or beyond, constitute any such warranty for individual or aggregate data use with other data. Although these data have been processed successfully on computers of BLM, no warranty, expressed or implied, is made by BLM regarding the use of these data on any other system, or for general or scientific purposes, nor does the fact of distribution constitute or imply any such warranty. In no event shall the BLM have any liability whatsoever for payment of any consequential, incidental, indirect, special, or tort damages of any kind, including, but not limited to, any loss of profits arising out of the use or reliance on the geographic data or arising out of the delivery, installation, operation, or support by BLM.</distliab>
+    </distinfo>
+    <metainfo>
+        <metd>20220829</metd>
+        <metrd>20220105</metrd>
+        <metc>
+            <cntinfo>
+                <cntorgp>
+                    <cntorg>BLM Colorado State Office</cntorg>
+                    <cntper>State Geospatial Lead</cntper>
+                </cntorgp>
+                <cntpos>State Geospatial Lead</cntpos>
+                <cntaddr>
+                    <addrtype>mailing and physical</addrtype>
+                    <address>2850 Youngfield Street</address>
+                    <city>Lakewood</city>
+                    <state>CO</state>
+                    <postal>80215</postal>
+                    <country>US</country>
+                </cntaddr>
+                <cntvoice>303 239-3600</cntvoice>
+                <cntemail>blm_co_info@blm.gov</cntemail>
+            </cntinfo>
+        </metc>
+        <metstdn>FGDC Content Standard for Digital Geospatial Metadata</metstdn>
+        <metstdv>FGDC-STD-001-1998</metstdv>
+        <mettc>local time</mettc>
+    </metainfo>
+</metadata>
