@@ -26,9 +26,6 @@ UFO_borders <- st_read(file.path(pr, f[grep('*admu.*shp$', f)]), quiet = T) %>%
   st_transform(4269) %>% 
   select(geometry)
 
-base_plots <- read.csv(file.path(pr, f[grep('*Plot*', f)])) %>% 
-   filter(!str_detect(PANEL, 'over'))
-
 summaries <- read.csv(file.path(pr, f[grep('*Hub*', f)])) %>% 
   filter(State == 'CO') %>%  # reduce to your state of interest 
   select(-X, -Y, -State:-EcolSiteName, -DateVisited, -Purpose:-DBKey, -PrimaryKey, 
@@ -37,15 +34,22 @@ summaries <- read.csv(file.path(pr, f[grep('*Hub*', f)])) %>%
   st_intersection(UFO_borders, .) %>% 
   select_if(~sum(!is.na(.)) > 0)
 
-rm(f, pr, UFO_borders)
+rm(UFO_borders)
 ```
-
 
 
 ```{r Filter TerraDat to grab only base AIM plots}
 
+baseplots <- st_read(file.path(pr, f[grep('*Design.*shp$', f)]), quiet = T) %>% 
+  filter(!str_detect(PANEL, 'Over')) %>% 
+  pull(PLOTID)
 
-
+summaries <- summaries %>% 
+  mutate(PlotID = str_replace(PlotID, 'Other', 'OT'),
+         PlotID = str_replace(PlotID, 'Rip', 'RI')) %>% 
+  filter(PlotID %in% baseplots)
+  
+rm(f, pr, baseplots)
 ```
 
 
@@ -70,7 +74,7 @@ Variation <- summaries %>% # IDENTIFY COLUMNS with little to no variation in the
   rownames_to_column('Variable') %>% rename(Variance = '.') %>% # here
   filter(!Variable %in% c('OBJECTID', 'Latitude_NAD83', 'Longitude_NAD83', 'YearEstablished'))
 
-# hist(Variation$Variance) # the values far left are seldom recorded, e.g. we got rid of vagrant lichen years ago!
+hist(Variation$Variance) # the values far left are seldom recorded, e.g. we got rid of vagrant lichen years ago!
 
 summaries1 <- summaries %>% 
   st_drop_geometry() %>% 
@@ -89,4 +93,54 @@ summaries <- summaries %>%
 rm(summary_cols_not_applicable, NA_per_col, Variation, summary_cols_not_applicable, summaries1)
 ```
 
+
+```{r Add Post Strat Values to figures}
+
+
+install.packages('wakefield')
+# currently just testing here
+
+
+sum1 <- summaries %>% 
+  separate(PlotID, into = 'Stratum', sep = '-', remove = F, extra = 'drop') %>% 
+  mutate(Stratum = factor(Stratum)) %>% 
+  st_transform(26912) %>% 
+  mutate(xcoord = unlist(map(.$geometry,1)),
+         ycoord = unlist(map(.$geometry,2))) %>% 
+  filter(PlotID != 'GR-021')
+
+v <- data.frame(weight = wakefield::probs(length(unique(sum1$Stratum))),
+           Stratum = unique(sum1$Stratum))
+
+sum1 <- left_join(sum1, v, by = 'Stratum')
+
+
+
+v <- cont_analysis(dframe = sum1, subpops = 'Stratum', vars = 'BareSoilCover', #statistics = 'Mean',
+              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70))
+
+pctv <- v[['Pct']] # XX Percent of the land which is achieving a standard. 
+meanv <- v[['Mean']] # easy peasy is the mean, and how certain we are that our calculation of it is true
+
+v1 <- c('GapCover_25_50', 'GapCover_51_100')
+
+cols2calc <- sum1 %>% 
+  select(where(is.numeric)) %>% 
+  select(BareSoilCover:Hgt_Sagebrush_Live_Avg) %>% 
+  st_drop_geometry() %>% 
+  colnames()
+
+strt <- Sys.time()
+v2 <- cont_analysis(dframe = sum1, subpops = 'Stratum', vars = cols2calc, statistics = 'Mean',
+              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80)
+v2 <- v2['Mean'] %>% bind_rows()
+Sys.time() - strt
+
+strt <- Sys.time()
+v3 <- cont_analysis(dframe = sum1, subpops = 'Stratum', vars = cols2calc[7:25], statistics = 'Pct',
+              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70)) # 80% for WSA and ACEC's otherwise 70!
+v3 <- v3['Mean'] %>% bind_rows()
+Sys.time() - strt
+
+```
 
