@@ -1,0 +1,1 @@
+Here we calculate the weighted summaries of numerous ecological indicators for multiple strata using spSurvey and AIM TerraDat Summaries. More results are written than we have the capacity to carefully analyse, so we are calculating everything across the data.frame and seeing what we know enough to write about afterwards.
