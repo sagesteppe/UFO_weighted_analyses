@@ -131,6 +131,8 @@ rm(summary_cols_not_applicable, NA_per_col, Variation, summaries1)
 prcnt_meeting <- function(x, grp_var1, variables, ...){
   
   # determine which groups have enough values > 0 for interpolation
+  
+  all_grps <- distinct(x, !!sym(grp_var1)) %>% pull() 
 
   grps2keep <- x %>% 
     group_by(!!sym(grp_var1)) %>%
@@ -141,19 +143,25 @@ prcnt_meeting <- function(x, grp_var1, variables, ...){
     distinct(!!sym(grp_var1)) %>% 
     pull(!!sym(grp_var1)) 
   
-  if(length(grps2keep) > 0) { # remove groups which cannot be calculated by the 
-    removed_grps <- distinct(x, !!sym(grp_var1)) %>% pull() # function here
-    removed_grps <- setdiff(removed_grps, grps2keep) %>%  # we will also save
+  if (length(grps2keep) == 0) {
+    
+    removed_grps <- data.frame(Subpopulation = all_grps)
+    return(removed_grps) ; stop()
+    
+  } else if(length(grps2keep) > 0) { # remove groups which cannot be calculated by the 
+    
+    removed_grps <- setdiff(all_grps, grps2keep) %>%  # we will also save
       data.frame(Subpopulation = .) # them out into a single row dataframe to
     x <- filter(x, !!sym(grp_var1) %in% grps2keep) # bind the values back on so
-   }
+    
+  } 
   
   if(nrow(x) > 1){ # calculate our data which we can. 
     return_vals <- cont_analysis(dframe = x, statistics = 'Pct', vars = variables,
                                subpops = as.character(substitute(grp_var1)), ...)
     return_vals <- return_vals[['Pct']]
   } else {
-    # neeed to 
+    return('water')
   }  
   
   
@@ -175,8 +183,12 @@ out <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type',  variables = 'AH_NoxPerenF
                      pctval = c(70, 80), conf = 80 )
 
 
-
 test <- colnames(sum1)
+test <- test[!test %in% c('geometry', 'ycoord', 'xcoord', 'Veg_type', 'YearEstablished',
+                          'Latitude_NAD83', 'Longitude_NAD83', 'GlobalID',
+                  'weight', 'OBJECTID', "PlotKey", 'PlotID','Stratum', 'DateEstablished')]
+
+
 out <- vector(mode = 'list', length = length(test))
 for (i in seq(test)){
   out[[i]] <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type',  variables = test[i],  
