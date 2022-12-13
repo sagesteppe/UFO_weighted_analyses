@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r Load Libraries}
 library(tidyverse)
 library(spsurvey)
-library(sf)
 ```
 
 
@@ -38,7 +37,7 @@ rm(UFO_borders)
 ```
 
 
-```{r Filter TerraDat to grab only base AIM plots}
+```{r Filter TerraDat to grab only base AIM plots and add post strat names}
 
 baseplots <- st_read(file.path(pr, f[grep('*Design.*shp$', f)]), quiet = T) %>% 
   filter(!str_detect(PANEL, 'Over')) %>% 
@@ -48,8 +47,14 @@ summaries <- summaries %>%
   mutate(PlotID = str_replace(PlotID, 'Other', 'OT'),
          PlotID = str_replace(PlotID, 'Rip', 'RI')) %>% 
   filter(PlotID %in% baseplots)
+
+restrat <- st_read(file.path(pr, f[grep('reclassified.*shp$', f)]), quiet = T) %>% 
+  st_drop_geometry() %>% 
+  select(-Plot)
+
+summaries <- left_join(summaries, restrat, by = 'PlotKey')
   
-rm(f, pr, baseplots)
+rm(f, pr, baseplots, restrat)
 ```
 
 
@@ -90,14 +95,45 @@ summaries <- summaries %>%
          YearEstablished = as.numeric(format(DateEstablished,'%Y'), .)
          )
 
-rm(summary_cols_not_applicable, NA_per_col, Variation, summary_cols_not_applicable, summaries1)
+rm(summary_cols_not_applicable, NA_per_col, Variation, summaries1)
+```
+
+
+```{r Datasets which may be evaluated for Percent acreage}
+
+
+# maybe write function that continuously tests the number of plots per group which
+# have > 2 records > 0. This should allow us to calculate these values for each stratum
+# otherwise some of the values that we will miss are too important to be left behind !
+# many of the noxious values would be missed if we did this. !
+
+
+#' A wrapper function for using spsurveys cont_analysis Prt statistic
+#' 
+#' @Description For use with strata and/or subpops which may have groups with 
+#' several 0 values which do not allow spsurvey to calculate percent standards.
+#' This function wraps around cont_analysis and will truncate those groups from 
+#' analysis, and append rows indicating that this operation was performed.
+#' 
+#' @param x a dataframe or sf tibble 
+#' @param grp_var1 one level of grouping variables - required
+#' @param grp_var2 another level of grouping variable - not required and defaults 
+#' to none
+#' @param ... additional arguments passed onto cont analysis e.g. pctval, cols holding coords
+prcnt_meeting <- function(x, grp_var1, ...){
+  
+  
+  cont_analysis(dframe = noxious, subpops = grp_var1, vars = nox_cols, statistics = 'Mean',
+              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70, 80))
+  
+  
+}
 ```
 
 
 ```{r Add Post Strat Values to figures}
 
-
-install.packages('wakefield')
+NLA_PNW
 # currently just testing here
 
 
@@ -111,13 +147,22 @@ sum1 <- summaries %>%
 
 v <- data.frame(weight = wakefield::probs(length(unique(sum1$Stratum))),
            Stratum = unique(sum1$Stratum))
-
 sum1 <- left_join(sum1, v, by = 'Stratum')
 
+noxious <- sum1 %>% 
+  select(Veg_type, contains("_Nox"), weight)
+
+nox_cols <- noxious %>% 
+  st_drop_geometry() %>% 
+  select(-Veg_type) %>% 
+  colnames()
+
+noxious_vals <- cont_analysis(dframe = noxious, subpops = 'Veg_type', vars = nox_cols, statistics = 'Mean',
+              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70, 80))
 
 
 v <- cont_analysis(dframe = sum1, subpops = 'Stratum', vars = 'BareSoilCover', #statistics = 'Mean',
-              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70))
+              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70, 80))
 
 pctv <- v[['Pct']] # XX Percent of the land which is achieving a standard. 
 meanv <- v[['Mean']] # easy peasy is the mean, and how certain we are that our calculation of it is true
