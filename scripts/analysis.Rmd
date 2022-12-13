@@ -126,53 +126,55 @@ prcnt_meeting <- function(x, grp_var1, variables, ...){
   
   # determine how many observations with values > 0 exist, if < 2, this value cannot
   # be interpolated from the continual analysis function below. 
-  grp_var1_enq <- enquo(grp_var1)
-  variables_enq <- enquo(variables)
-  
-  grps2remove <- x %>% 
-    group_by(across({{ grp_var1_enq }})) %>% # the GROUPING IS NOT TAKING !!!!  
-    drop_na(!!variables_enq) %>% 
-    filter(!!variables_enq > 0) %>%  
+
+  grps2keep <- x %>% 
+    group_by(!!sym(grp_var1)) %>%
+    drop_na(!!sym(variables)) %>% 
+    filter(!!sym(variables) > 0) %>%  
     mutate(Records = n()) %>% 
-    filter(Records < 2) %>% 
-    distinct(!!grp_var1_enq, .keep_all = T) %>% 
-    st_drop_geometry() %>% 
-    pull(!!grp_var1_enq) 
+    filter(Records > 2) %>% 
+    distinct(!!sym(grp_var1)) %>% 
+    pull(!!sym(grp_var1)) 
   
-  `%notin%` <- negate(`%in%`)
-  
-  if(length(grps2remove) > 0) {
-   x <- filter(x, !! grp_var1_enq %notin% grps2remove)
+  if(length(grps2keep) > 0) {
+   x <- filter(x, !!sym(grp_var1) %in% grps2keep)
    } else{x}
   
-  #return_vals <- cont_analysis(dframe = x, statistics = 'Pct', vars = variables,
-  #                             subpops = as.character(substitute(grp_var1)), ...)
-  #return_vals <- return_vals[['Pct']]
-  return(grps2remove)
+  if(nrow(x) > 1){
+    return_vals <- cont_analysis(dframe = x, statistics = 'Pct', vars = variables,
+                               subpops = as.character(substitute(grp_var1)), ...)
+    return_vals <- return_vals[['Pct']]
+  } else {'waterboy'}
+  
+  return(grps2keep)
   
 }
 
-sum1 <- ungroup(sum1)
-out <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type', variables = 'AH_NoxPerenForbCover', #, 'Hgt_NonNoxPerenGrass_Avg'), 
+
+sum2 <- drop_na(sum2, Veg_type)
+
+out <- prcnt_meeting(x = sum2, grp_var1 = 'Veg_type', variables = 'AH_NoxPerenForbCover', #, 'Hgt_NonNoxPerenGrass_Avg'), 
                      pctval = c(70, 80), conf = 80 )
 out
-str(out)
 
 errorprnt()
 
 
+sum2 <- sum1 %>% select(Veg_type, AH_NoxPerenForbCover)
 
 
 
- grps2remove <- x %>% 
-    group_by(across({{ grp_var1_enq }})) %>% # the GROUPING IS NOT TAKING !!!!  
-    drop_na(!!variables_enq) %>% 
-    filter(!!variables_enq > 0) %>%  
+
+
+
+ grps2remove <- sum1 %>% 
+    group_by(Veg_type) %>% 
+    drop_na(AH_NoxPerenForbCover) %>% 
+    filter(AH_NoxPerenForbCover > 0) %>%  
     mutate(Records = n()) %>% 
     filter(Records < 2) %>% 
-    distinct(!!grp_var1_enq, .keep_all = T) %>% 
-    st_drop_geometry() %>% 
-    pull(!!grp_var1_enq) 
+    distinct(Veg_type) %>% 
+    pull(Veg_type) 
 
 
 ```
