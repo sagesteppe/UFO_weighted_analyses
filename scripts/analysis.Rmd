@@ -69,6 +69,12 @@ NA_per_col <- summaries %>% # we can identify columns which have MANY NA values 
   summarise(across(.cols = everything(),  ~ (sum(is.na(.))))/nrow(.) * 100) %>% 
   select(where(~ .x >= 10)) # you want to take a look at them - Ours are not too bad.
 
+zero_per_col <- summaries %>% # we can identify columns which have MANY 0 values
+  st_drop_geometry() %>% # perhaps > 75 percent 0 is too many zereos!
+  summarise(across(.cols = everything(), ~ sum(.x == 0))/nrow(.) * 100)  %>%
+  mutate(across(.cols = everything(), ~ if_else(is.na(.x), 0, .x))) %>% 
+  select(where(~ .x >= 75))
+
 Variation <- summaries %>% # IDENTIFY COLUMNS with little to no variation in the 
   st_drop_geometry() %>% # measured variables, if we see var == 0, all measurements
   select(where(~ is.numeric(.x))) %>%  # were the same but not caught by 'summary cols not applicable'
@@ -124,8 +130,7 @@ rm(summary_cols_not_applicable, NA_per_col, Variation, summaries1)
 #' 
 prcnt_meeting <- function(x, grp_var1, variables, ...){
   
-  # determine how many observations with values > 0 exist, if < 2, this value cannot
-  # be interpolated from the continual analysis function below. 
+  # determine which groups have enough values > 0 for interpolation
 
   grps2keep <- x %>% 
     group_by(!!sym(grp_var1)) %>%
@@ -137,7 +142,8 @@ prcnt_meeting <- function(x, grp_var1, variables, ...){
     pull(!!sym(grp_var1)) 
   
   if(length(grps2keep) > 0) {
-   x <- filter(x, !!sym(grp_var1) %in% grps2keep)
+    removed_grps <- distinct(x, !!sym(grp_var1)) %>% pull() ; removed_grps <- setdiff(removed_grps, grps2keep)
+    x <- filter(x, !!sym(grp_var1) %in% grps2keep)
    } else{x}
   
   if(nrow(x) > 1){
@@ -146,36 +152,17 @@ prcnt_meeting <- function(x, grp_var1, variables, ...){
     return_vals <- return_vals[['Pct']]
   } else {'waterboy'}
   
-  return(grps2keep)
+  return( list( return_vals, removed_grps) )
   
 }
 
 
+sum2 <- sum1 %>% select(Veg_type, FH_MossCover, weight)
 sum2 <- drop_na(sum2, Veg_type)
 
-out <- prcnt_meeting(x = sum2, grp_var1 = 'Veg_type', variables = 'AH_NoxPerenForbCover', #, 'Hgt_NonNoxPerenGrass_Avg'), 
+out <- prcnt_meeting(x = sum2, grp_var1 = 'Veg_type', variables = 'FH_MossCover', #, 'Hgt_NonNoxPerenGrass_Avg'), 
                      pctval = c(70, 80), conf = 80 )
 out
-
-errorprnt()
-
-
-sum2 <- sum1 %>% select(Veg_type, AH_NoxPerenForbCover)
-
-
-
-
-
-
- grps2remove <- sum1 %>% 
-    group_by(Veg_type) %>% 
-    drop_na(AH_NoxPerenForbCover) %>% 
-    filter(AH_NoxPerenForbCover > 0) %>%  
-    mutate(Records = n()) %>% 
-    filter(Records < 2) %>% 
-    distinct(Veg_type) %>% 
-    pull(Veg_type) 
-
 
 ```
 
