@@ -123,10 +123,10 @@ rm(summary_cols_not_applicable, NA_per_col, Variation, summaries1)
 #' 
 #' @param x a dataframe or sf tibble 
 #' @param grp_var1 one level of grouping variables - required
-#' @param grp_var2 another level of grouping variable - not required and defaults to none
 #' @param variables the variables which you are going to compute - see example. 
 #' @param ... additional arguments passed onto cont analysis e.g. pctval, cols holding coords
 #' 
+#' @example This function will applied as a for-loop to understand when are where it fails.
 #' 
 prcnt_meeting <- function(x, grp_var1, variables, ...){
   
@@ -145,7 +145,10 @@ prcnt_meeting <- function(x, grp_var1, variables, ...){
   
   if (length(grps2keep) == 0) {
     
-    removed_grps <- data.frame(Subpopulation = all_grps)
+    type <- select(x, !!sym(grp_var1)) %>% colnames() ; type <- type[1]
+    indi <- select(x, !!sym(variables)) %>% colnames() ; indi <- indi[1]
+    removed_grps <- data.frame(Type = type, Subpopulation = all_grps, Indicator = indi) # which var did we crash on!??
+    
     return(removed_grps) ; stop()
     
   } else if(length(grps2keep) > 0) { # remove groups which cannot be calculated by the 
@@ -176,29 +179,9 @@ prcnt_meeting <- function(x, grp_var1, variables, ...){
   
 }
 
-sum2 <- sum1 %>% select(Veg_type, FH_MossCover, weight)
-sum2 <- drop_na(sum2, Veg_type)
 
-out <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type',  variables = 'AH_NoxPerenForbCover',  
-                     pctval = c(70, 80), conf = 80 )
-
-
-test <- colnames(sum1)
-test <- test[!test %in% c('geometry', 'ycoord', 'xcoord', 'Veg_type', 'YearEstablished',
-                          'Latitude_NAD83', 'Longitude_NAD83', 'GlobalID',
-                  'weight', 'OBJECTID', "PlotKey", 'PlotID','Stratum', 'DateEstablished')]
-
-
-out <- vector(mode = 'list', length = length(test))
-for (i in seq(test)){
-  out[[i]] <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type',  variables = test[i],  
-                     pctval = c(70, 80), conf = 80 )
-}
-
-```
-
-
-```{r Add Post Strat Values to figures}
+#out <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type',  variables = 'AH_NoxPerenForbCover',  
+#                     pctval = c(70, 80), conf = 80 )
 
 
 sum1 <- summaries %>% 
@@ -213,13 +196,27 @@ v <- data.frame(weight = wakefield::probs(length(unique(sum1$Stratum))),
            Stratum = unique(sum1$Stratum))
 sum1 <- left_join(sum1, v, by = 'Stratum')
 
-noxious <- sum1 %>% 
-  select(Veg_type, contains("_Nox"), weight)
 
-nox_cols <- noxious %>% 
-  st_drop_geometry() %>% 
-  select(-Veg_type) %>% 
-  colnames()
+
+contVars2Calc <- colnames(sum1)
+contVars2Calc <- contVars2Calc[!contVars2Calc %in% c('geometry', 'ycoord', 'xcoord', 'Veg_type', 'YearEstablished',
+                          'Latitude_NAD83', 'Longitude_NAD83', 'GlobalID',
+                  'weight', 'OBJECTID', "PlotKey", 'PlotID','Stratum', 'DateEstablished')]
+
+contVarsInter <- vector(mode = 'list', length = length(contVars2Calc))
+for (i in seq(contVars2Calc)){
+  contVarsInter[[i]] <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type',  variables = contVars2Calc[i],  
+                     pctval = c(70, 80), conf = 80 )
+}
+
+bind_rows(contVarsInter)
+
+```
+
+
+```{r Add Post Strat Values to figures}
+
+
 
 noxious_vals <- cont_analysis(dframe = noxious, subpops = 'Veg_type', vars = nox_cols, statistics = 'Mean',
               xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70, 80))
