@@ -13,7 +13,6 @@ knitr::opts_chunk$set(echo = TRUE)
 ```{r Load Libraries}
 library(tidyverse)
 library(spsurvey)
-
 source('functions.R')
 ```
 
@@ -103,75 +102,71 @@ summaries <- summaries %>%
          YearEstablished = as.numeric(format(DateEstablished,'%Y'), .)
          )
 
-rm(summary_cols_not_applicable, NA_per_col, Variation, summaries1)
+rm(summary_cols_not_applicable, NA_per_col, Variation, summaries1, zero_per_col)
 ```
 
 
-```{r Datasets which may be evaluated for Percent acreage}
-
+```{r Calculate Percent of each Stratum meeting standards}
 
 sum1 <- summaries %>% 
   separate(PlotID, into = 'Stratum', sep = '-', remove = F, extra = 'drop') %>% 
   mutate(Stratum = factor(Stratum)) %>% 
   st_transform(26912) %>% 
-  mutate(xcoord = unlist(map(.$geometry,1)),
-         ycoord = unlist(map(.$geometry,2))) %>% 
   filter(PlotID != 'GR-021')
 
 v <- data.frame(weight = wakefield::probs(length(unique(sum1$Stratum))),
            Stratum = unique(sum1$Stratum))
 sum1 <- left_join(sum1, v, by = 'Stratum')
 
-contVars2Calc <- colnames(sum1)
-contVars2Calc <- contVars2Calc[!contVars2Calc %in% c('geometry', 'ycoord', 'xcoord', 'Veg_type', 'YearEstablished',
-                          'Latitude_NAD83', 'Longitude_NAD83', 'GlobalID',
-                  'weight', 'OBJECTID', "PlotKey", 'PlotID','Stratum', 'DateEstablished')]
+contVars2Calc <- sum1 %>% 
+  select(BareSoilCover:NumSpp_PreferredForb ) %>% 
+  st_drop_geometry() %>% 
+  colnames(.)
 
 contVarsInter <- vector(mode = 'list', length = length(contVars2Calc))
 for (i in seq(contVars2Calc)){
   contVarsInter[[i]] <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type',  variables = contVars2Calc[i],  
                      pctval = c(70, 80), conf = 80 )
 }
-
 contVarsInter <- bind_rows(contVarsInter)
 
-rm(i, contVars2Calc)
+
+# recode the upper and lower end of confidence intervals for values which represent
+# percentages, such as cover
+
+cover <- contVarsInter %>% 
+  filter(str_detect(Indicator, 'Cover')) %>% 
+  mutate(across(starts_with('LCB'), ~  if_else(.x < 0, 0, .x))) %>% 
+  mutate(across(starts_with('UCB'), ~  if_else(.x > 100, 100, .x)))
+contVarsInter %>% 
+  filter(!str_detect(Indicator, 'Cover')) %>% 
+  bind_rows(cover)
+
+rm(i, cover, prcnt_meeting)
 ```
 
 
-```{r Add Post Strat Values to figures}
+```{r Calculate Mean Indicator Values}
+
+contVarsMeans <- cont_analysis(dframe = sum1, subpops = 'Veg_type', vars = contVars2Calc, 
+                               statistics = 'Mean', conf = 80)
+contVarsMeans <- contVarsMeans['Mean'] %>% bind_rows()
+
+cover <- contVarsMeans %>% 
+  filter(str_detect(Indicator, 'Cover')) %>% 
+  mutate(across(starts_with('LCB'), ~  if_else(.x < 0, 0, .x))) %>% 
+  mutate(across(starts_with('UCB'), ~  if_else(.x > 100, 100, .x)))
+contVarsMeans <- contVarsMeans %>% 
+  filter(!str_detect(Indicator, 'Cover')) %>% 
+  bind_rows(cover)
+
+rm(cover, warn_df)
+```
 
 
 
-noxious_vals <- cont_analysis(dframe = noxious, subpops = 'Veg_type', vars = nox_cols, statistics = 'Mean',
-              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70, 80))
-
-
-v <- cont_analysis(dframe = sum1, subpops = 'Veg_type', vars = nox_cols[1], statistics = 'Pct',
-              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70, 80))
-
-pctv <- v[['Pct']] # XX Percent of the land which is achieving a standard. 
-meanv <- v[['Mean']] # easy peasy is the mean, and how certain we are that our calculation of it is true
-
-v1 <- c('GapCover_25_50', 'GapCover_51_100')
-
-cols2calc <- sum1 %>% 
-  select(where(is.numeric)) %>% 
-  select(BareSoilCover:Hgt_Sagebrush_Live_Avg) %>% 
-  st_drop_geometry() %>% 
-  colnames()
-
-strt <- Sys.time()
-v2 <- cont_analysis(dframe = sum1, subpops = 'Stratum', vars = cols2calc, statistics = 'Mean',
-              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80)
-v2 <- v2['Mean'] %>% bind_rows()
-Sys.time() - strt
-
-strt <- Sys.time()
-v3 <- cont_analysis(dframe = sum1, subpops = 'Stratum', vars = cols2calc[7:25], statistics = 'Pct',
-              xcoord = 'xcoord', ycoord = 'ycoord', conf = 80, pctval = c(70)) # 80% for WSA and ACEC's otherwise 70!
-v3 <- v3['Mean'] %>% bind_rows()
-Sys.time() - strt
+```{r}
 
 ```
 
+# Reference
