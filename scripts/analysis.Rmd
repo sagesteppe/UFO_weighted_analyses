@@ -6,7 +6,10 @@ output: word_document
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(echo = F)
+knitr::opts_chunk$set(dpi = 300) 
+knitr::opts_chunk$set(message = F)
+knitr::opts_chunk$set(warning = F)
 ```
 
 
@@ -130,7 +133,6 @@ for (i in seq(contVars2Calc)){
 }
 contVarsInter <- bind_rows(contVarsInter)
 
-
 # recode the upper and lower end of confidence intervals for values which represent
 # percentages, such as cover
 
@@ -159,6 +161,8 @@ cover <- contVarsMeans %>%
 contVarsMeans <- contVarsMeans %>% 
   filter(!str_detect(Indicator, 'Cover')) %>% 
   bind_rows(cover)
+
+warnprnt()
 
 rm(cover, warn_df)
 ```

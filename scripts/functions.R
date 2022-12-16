@@ -13,6 +13,12 @@
 #' 
 #' @example This function will applied as a for-loop to understand when are where it fails.
 #' 
+#' contVarsInter <- vector(mode = 'list', length = length(contVars2Calc))
+#' for (i in seq(contVars2Calc)){
+#'   contVarsInter[[i]] <- prcnt_meeting(x = sum1, grp_var1 = 'Veg_type',  variables = contVars2Calc[i],  
+#'                                       pctval = c(70, 80), conf = 80 )
+#' }
+#' contVarsInter <- bind_rows(contVarsInter)
 #' @export
 prcnt_meeting <- function(x, grp_var1, variables, ...){
   
@@ -37,7 +43,7 @@ prcnt_meeting <- function(x, grp_var1, variables, ...){
     
     return(removed_grps) ; stop()
     
-  } else if(length(grps2keep) > 0) { # remove groups which cannot be calculated by the 
+  } else if(length(grps2keep) > 0) { # remove groups which cannot be calculated by the function
     
     removed_grps <- setdiff(all_grps, grps2keep) %>%  # we will also save
       data.frame(Subpopulation = .) # them out into a single row dataframe to
